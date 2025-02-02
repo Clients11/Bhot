@@ -1,6 +1,6 @@
 import math
 
-from AviaXMusic import app
+from AviaxMusic import app
 
 from pyrogram.types import InlineKeyboardButton
 
