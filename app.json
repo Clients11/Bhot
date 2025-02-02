@@ -1,10 +1,10 @@
 {
 
-    "name": "Aviax Music",
+    "name": "Ace Music",
 
     "description": "A Telegram Music Player Bot, written in Python with Pyrogram and Py-Tgcalls.",
 
-    "logo": "https://telegra.ph/Aviax-02-24",
+    "logo": "https://iili.io/2rrDKJe.jpg",
 
     "keywords": [
 
@@ -62,6 +62,16 @@
 
         "value": "",
 
+        "required": true
+
+      },
+        
+      "YTPROXY_URL": {
+           
+        "description": "YT Proxy Server Endpoint",
+           
+        "value": "",
+           
         "required": true
 
       },
