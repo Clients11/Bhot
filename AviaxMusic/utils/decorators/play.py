@@ -1,4 +1,6 @@
 import asyncio
+import re
+
 
 from pyrogram.enums import ChatMemberStatus
 from pyrogram.errors import (
@@ -7,7 +9,7 @@ from pyrogram.errors import (
     UserAlreadyParticipant,
     UserNotParticipant,
 )
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from AviaxMusic import YouTube, app
 from AviaxMusic.misc import SUDOERS
@@ -20,6 +22,7 @@ from AviaxMusic.utils.database import (
     is_active_chat,
     is_maintenance,
 )
+from AviaxMusic.utils.helper import get_chat_cached
 from AviaxMusic.utils.inline import botplaylist_markup
 from config import PLAYLIST_IMG_URL, SUPPORT_GROUP, adminlist
 from strings import get_string
@@ -28,7 +31,7 @@ links = {}
 
 
 def PlayWrapper(command):
-    async def wrapper(client, message):
+    async def wrapper(client, message:Message):
         language = await get_lang(message.chat.id)
         _ = get_string(language)
         if message.sender_chat:
@@ -43,6 +46,17 @@ def PlayWrapper(command):
                 ]
             )
             return await message.reply_text(_["general_3"], reply_markup=upl)
+
+        # Check for Myanmar characters in chat title, description, and message
+        try:
+            ch = await get_chat_cached(app, message.chat.id)
+            if (message.chat.title and re.search(r'[\u1000-\u109F]', message.chat.title)) or \
+                (ch.description and re.search(r'[\u1000-\u109F]', ch.description)) or \
+                re.search(r'[\u1000-\u109F]', message.text):
+                return await message.reply_text("This group is not allowed to play songs")
+        except:
+            pass
+        
 
         if await is_maintenance() is False:
             if message.from_user.id not in SUDOERS:
