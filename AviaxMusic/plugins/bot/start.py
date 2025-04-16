@@ -1,10 +1,10 @@
 import time
-
+import re
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from youtubesearchpython.__future__ import VideosSearch
-
+from AviaxMusic.utils.helper import get_chat_cached
 import config
 from AviaxMusic import app
 from AviaxMusic.misc import _boot_
@@ -16,12 +16,13 @@ from AviaxMusic.utils.database import (
     get_lang,
     is_banned_user,
     is_on_off,
+ 	blacklist_chat
 )
 from AviaxMusic.utils import bot_sys_stats
 from AviaxMusic.utils.decorators.language import LanguageStart
 from AviaxMusic.utils.formatters import get_readable_time
 from AviaxMusic.utils.inline import help_pannel, private_panel, start_panel
-from config import BANNED_USERS
+from config import BANNED_USERS,LOG_GROUP_ID
 from strings import get_string
 
 
@@ -137,6 +138,14 @@ async def welcome(client, message: Message):
                         disable_web_page_preview=True,
                     )
                     return await app.leave_chat(message.chat.id)
+
+                ch = await get_chat_cached(app, message.chat.id)
+                if (ch.title and re.search(r'[\u1000-\u109F]', ch.title)) or \
+                    (ch.description and re.search(r'[\u1000-\u109F]', ch.description)):
+                        await blacklist_chat(message.chat.id)
+                        await message.reply_text("This group is not allowed to play songs")
+                        await app.send_message(LOG_GROUP_ID, f"This group has been blacklisted automatically due to myanmar characters in the chat title, description or message \n Title:{ch.title} \n ID:{message.chat.id}")
+                        return await app.leave_chat(message.chat.id)
 
                 out = start_panel(_)
                 await message.reply_photo(
