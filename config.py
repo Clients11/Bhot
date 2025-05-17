@@ -16,7 +16,7 @@ BOT_TOKEN = getenv("BOT_TOKEN")
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", None)
 
-DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 80))
+DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 120))
 
 # Vars For API End Pont.
 YTPROXY_URL = getenv("YTPROXY_URL", 'http://tubed.okflix.top') ## E.G https://yt.okflix.
@@ -43,7 +43,7 @@ GIT_TOKEN = getenv(
     "GIT_TOKEN", None
 )  # Fill this variable if your upstream repository is private
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/Ace_networkop")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/YaariNews")
 SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/YaariSupport")
 
 # Set this to True if you want the assistant to automatically leave chats after an interval
